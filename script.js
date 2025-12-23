@@ -21,24 +21,28 @@ Promise.all(
         cities = response[0];
         person = response[1];
         specialization = response[2];
-
+getInfo()
+        testString.call(cities)
     })
-console.log(cities)
 
-//
-// function getInfo() {
-//     // console.log(person);
-//     let output = person.map(item => {
-//         let citi = cities.find(citiItem => {
-//
-//             return citiItem.id === item.personal.locationId;
-//
-//         });
-//         item.personal.locationId = citi.name
-//         return item.personal
-//     })
-//     console.log(output[0].firstName)
-// }
+function testString() {
+console.log(this[0].name)
+}
+
+
+function getInfo() {
+    // console.log(person);
+    let output = person.map(item => {
+        let citi = cities.find(citiItem => {
+
+            return citiItem.id === item.personal.locationId;
+
+        });
+        item.personal.locationId = citi.name
+        return item.personal
+    })
+    console.log(output)
+}
 
 
 
