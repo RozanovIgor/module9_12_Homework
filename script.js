@@ -21,27 +21,23 @@ Promise.all(
         cities = response[0];
         person = response[1];
         specialization = response[2];
-getInfo()
-        testString.call(cities)
-    })
+        for (i = 0; i < person.length; i++) {
+            getInfo.call(person[i])
+        }
 
-function testString() {
-console.log(this[0].name)
-}
+    })
 
 
 function getInfo() {
-    // console.log(person);
-    let output = person.map(item => {
-        let citi = cities.find(citiItem => {
+    const location = cities.find(citiItem => citiItem.id === this.personal.locationId);
+    if (location && location.name) {
+        console.log(`${this.personal.firstName} ${this.personal.lastName}, город ${location.name} `);
+    }
+}
 
-            return citiItem.id === item.personal.locationId;
+function findFirstReact () {
+    const firstReact  = person.find(personItem => person.skills.find(skillItem => skillItem.name === 'React'));
 
-        });
-        item.personal.locationId = citi.name
-        return item.personal
-    })
-    console.log(output)
 }
 
 
