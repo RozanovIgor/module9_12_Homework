@@ -21,11 +21,16 @@ Promise.all(
         cities = response[0];
         person = response[1];
         specialization = response[2];
-        for (i = 0; i < person.length; i++) {
-            getInfo.call(person[i])
-        }
+            getInfo.call(person[0]);
+        console.log(`разработчик на React `);
+        findFirstReact();
+
 
     })
+
+function getSkillUser (user, skillName) {
+    return user.skills.find(skill => skill.name.toLowerCase() === skillName);
+}
 
 
 function getInfo() {
@@ -36,9 +41,15 @@ function getInfo() {
 }
 
 function findFirstReact () {
-    const firstReact  = person.find(personItem => person.skills.find(skillItem => skillItem.name === 'React'));
+    const userReact = person.find(item=> {
+        return getSkillUser(item, 'figma')
+    });
+    console.log(`userReact ${userReact}`)
+    getInfo.call(userReact);
 
 }
+
+
 
 
 
