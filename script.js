@@ -43,6 +43,33 @@ function getInfo() {
     }
 }
 
+function getUserSpecialization (specName) {
+    const spec = specialization.find(spec => spec.name.toLocaleLowerCase() === specName);
+    if (spec && spec.id) {
+        return person.filter(user => user.personal.specializationId === spec.id);
+    }
+}
+
+function getTypeEmployment (user, valueEmployment) {
+    return user.request.find(val => val.name === valueEmployment);
+
+}
+
+function getCityName (users, cityName) {
+    const location = cities.find(city => city.name.toLocaleLowerCase() === cityName);
+    if (location && location.name) {
+        users = person;
+    }
+    return users.filter(user => {
+        let userLocation = cities.find(city => city.id === user.personal.locationId);
+        return userLocation && userLocation.name === cityName;
+    });
+}
+
+
+
+
+
 function findFirstReact() {
     const userReact = person.find(item => {
         return getSkillUser(item, 'react')
@@ -83,19 +110,52 @@ function isOlder(age) {
 
 
 function findBackend() {
-    console.log('backenders')
-    let backendId = specialization.find(item => item.name.toLowerCase() === 'backend');
-    if (backendId) {
-        let backenders = person.filter(item => item.personal.specializationId === backendId.id);
-        backenders.forEach(person => {
-            let occupation = person.request.find(item => {
-                return item.value.toLowerCase() === 'полная';
-            })
-            if (occupation) {
-                getInfo.call(person);
-            }
 
-        })
+// старый код - ошибка - пытаюсь прочитать атрибут name.value но их на самом деле несколько
+
+    // console.log('backenders')
+    // let backendId = specialization.find(item => item.name.toLowerCase() === 'backend');
+    // if (backendId) {
+    //     let backenders = person.filter(item => item.personal.specializationId === backendId.id);
+    //     backenders.forEach(person => {
+    //         let occupation = person.request.find(item => {
+    //             return item.value.toLowerCase() === 'полная';
+    //         })
+    //         if (occupation) {
+    //             getInfo.call(person);
+    //         }
+    //
+    //     })
+    // }
+
+    // =========================
+
+
+    const backends = getUserSpecialization('backend');
+    if (backends && backends.length > 0) {
+        let getTypeEmp = backends.filter(val => {
+            return getTypeEmployment(val,'Тип занятости');
+        });
+        if (getTypeEmp &&  getTypeEmp.value) {
+            return getTypeEmp.value === "Полная";
+        }
+        if (getTypeEmp.length > 0) {
+            const liveInMoscow = getCityName(getTypeEmp, 'Москва');
+            if (liveInMoscow.length > 0) {
+                let sortBackDevsFullTime = liveInMoscow.sort((itm1, itm2) => {
+                    let devOneSalary = getTypeEployment(itm1, 'Зарплата');
+                    let devTwoSalary = getTypeEployment(itm2, 'Зарплата');
+                    if (devTwoSalary && devTwoSalary.value && devTwoSalary && devTwoSalary.value) {
+                        return devTwoSalary.value - devTwoSalary.value;
+                    }
+                })
+                if (sortBackDevsFullTime.length > 0) {
+                    sortBackDevsFullTime.forEach(itm => {
+                        getInfo.call(itm);
+                    })
+                }
+            }
+        }
     }
 }
 
